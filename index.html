@@ -80,6 +80,13 @@
     text-transform:uppercase;letter-spacing:.14em;
     font-size:.9rem;color:var(--lamp);margin-top:12px;
   }
+  .say{
+    font-family:"IBM Plex Sans",sans-serif;font-size:.86rem;
+    color:var(--paper-dim);margin-top:7px;letter-spacing:.02em;
+  }
+  .say::before{content:"say it: ";color:var(--sign);
+    font-family:"IBM Plex Sans Condensed",sans-serif;text-transform:uppercase;
+    letter-spacing:.12em;font-size:.72rem;}
   .en{
     margin-top:18px;padding-top:16px;border-top:1px solid var(--line);
     color:var(--paper);font-size:1.02rem;
@@ -123,6 +130,17 @@
   .play{flex:1;background:var(--sign);border-color:var(--sign);color:#06170f;}
   .play:hover{background:#1ea06e;}
 
+  .dock{}
+  @media (max-width:680px){
+    .dock{
+      position:sticky;bottom:0;z-index:20;
+      margin:0 -18px;padding:10px 18px calc(10px + env(safe-area-inset-bottom));
+      background:rgba(13,22,38,.94);
+      backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+      border-top:1px solid var(--line);
+    }
+    body{padding-bottom:24px;}
+  }
   .opts{display:flex;flex-wrap:wrap;gap:14px;align-items:center;
     margin:18px 0 6px;font-size:.82rem;color:var(--paper-dim);}
   .opts label{display:flex;align-items:center;gap:7px;}
@@ -180,6 +198,7 @@
     <div class="board-main">
       <div class="jp" id="jpText">すみません</div>
       <div class="romaji" id="romajiText">Sumimasen</div>
+      <div class="say" id="sayText">soo-mee-mah-SEN</div>
       <div class="en" id="enText">Excuse me / Sorry</div>
       <div class="usage" id="usageText">The single most useful word in Japan — to get attention, apologize, or say thanks.</div>
     </div>
@@ -196,10 +215,12 @@
     <div class="rail-dots" id="railDots"></div>
   </div>
 
+  <div class="dock">
   <div class="controls">
     <button id="prevBtn" aria-label="Previous phrase">◀</button>
     <button class="play" id="playBtn">Play</button>
     <button id="nextBtn" aria-label="Next phrase">▶</button>
+  </div>
   </div>
 
   <div class="opts">
@@ -228,34 +249,34 @@
 
 <script>
 const phrases = [
- {jp:"すみません",romaji:"Sumimasen",en:"Excuse me / Sorry",note:"The most useful word in Japan — gets attention, apologizes, and thanks."},
- {jp:"ありがとうございます",romaji:"Arigatou gozaimasu",en:"Thank you very much",note:"Full polite form. Drop 'gozaimasu' only with friends."},
- {jp:"お願いします",romaji:"Onegaishimasu",en:"Please",note:"Attach to almost any request to make it polite."},
- {jp:"はい",romaji:"Hai",en:"Yes",note:""},
- {jp:"いいえ",romaji:"Iie",en:"No",note:"Often softened to 'daijoubu desu' when declining something."},
- {jp:"こんにちは",romaji:"Konnichiwa",en:"Hello",note:"Daytime only, roughly 11am to dusk."},
- {jp:"おはようございます",romaji:"Ohayou gozaimasu",en:"Good morning",note:""},
- {jp:"こんばんは",romaji:"Konbanwa",en:"Good evening",note:""},
- {jp:"さようなら",romaji:"Sayounara",en:"Goodbye",note:"Fairly final. For shops, 'arigatou gozaimasu' on the way out is more natural."},
- {jp:"英語を話せますか",romaji:"Eigo o hanasemasu ka",en:"Do you speak English?",note:"Lead with 'sumimasen' first."},
- {jp:"わかりません",romaji:"Wakarimasen",en:"I don't understand",note:""},
- {jp:"これは何ですか",romaji:"Kore wa nan desu ka",en:"What is this?",note:"Point at the menu item and use it freely."},
- {jp:"いくらですか",romaji:"Ikura desu ka",en:"How much is it?",note:""},
- {jp:"トイレはどこですか",romaji:"Toire wa doko desu ka",en:"Where is the toilet?",note:"Swap 'toire' for any place name to ask where it is."},
- {jp:"駅はどこですか",romaji:"Eki wa doko desu ka",en:"Where is the station?",note:""},
- {jp:"これをください",romaji:"Kore o kudasai",en:"This one, please",note:"Point and say it. Half your ordering is done."},
- {jp:"お会計お願いします",romaji:"Okaikei onegaishimasu",en:"The check, please",note:"Often you pay at the front register instead of the table."},
- {jp:"予約をお願いします",romaji:"Yoyaku o onegaishimasu",en:"I'd like a reservation",note:""},
- {jp:"一人です",romaji:"Hitori desu",en:"One person",note:"Said at the restaurant door when they ask how many."},
- {jp:"二人です",romaji:"Futari desu",en:"Two people",note:""},
- {jp:"美味しい",romaji:"Oishii",en:"Delicious",note:"Say it out loud at the counter. It always lands well."},
- {jp:"大丈夫です",romaji:"Daijoubu desu",en:"It's fine / No thank you",note:"Doubles as a polite refusal — for a bag, a receipt, anything."},
- {jp:"助けてください",romaji:"Tasukete kudasai",en:"Please help me",note:""},
- {jp:"写真を撮ってもいいですか",romaji:"Shashin o totte mo ii desu ka",en:"May I take a photo?",note:"Worth asking inside temples, shops, and small restaurants."},
- {jp:"すごい",romaji:"Sugoi",en:"Amazing / Wow",note:""},
- {jp:"乾杯",romaji:"Kanpai",en:"Cheers",note:"Wait for everyone's glass before the first sip."},
- {jp:"またね",romaji:"Mata ne",en:"See you later",note:"Casual — for people you've actually met."},
- {jp:"どういたしまして",romaji:"Dou itashimashite",en:"You're welcome",note:""},
+ {jp:"すみません",romaji:"Sumimasen",say:"soo-mee-mah-SEN",en:"Excuse me / Sorry",note:"The most useful word in Japan — gets attention, apologizes, and thanks."},
+ {jp:"ありがとうございます",romaji:"Arigatou gozaimasu",say:"ah-ree-GAH-toh go-zah-ee-mahs",en:"Thank you very much",note:"Full polite form. Drop 'gozaimasu' only with friends."},
+ {jp:"お願いします",romaji:"Onegaishimasu",say:"oh-neh-gah-ee-shee-mahs",en:"Please",note:"Attach to almost any request to make it polite."},
+ {jp:"はい",romaji:"Hai",say:"hah-ee",en:"Yes",note:""},
+ {jp:"いいえ",romaji:"Iie",say:"EE-eh",en:"No",note:"Often softened to 'daijoubu desu' when declining something."},
+ {jp:"こんにちは",romaji:"Konnichiwa",say:"kohn-nee-chee-wah",en:"Hello",note:"Daytime only, roughly 11am to dusk."},
+ {jp:"おはようございます",romaji:"Ohayou gozaimasu",say:"oh-hah-YOH go-zah-ee-mahs",en:"Good morning",note:""},
+ {jp:"こんばんは",romaji:"Konbanwa",say:"kohn-bahn-wah",en:"Good evening",note:""},
+ {jp:"さようなら",romaji:"Sayounara",say:"sah-YOH-nah-rah",en:"Goodbye",note:"Fairly final. For shops, 'arigatou gozaimasu' on the way out is more natural."},
+ {jp:"英語を話せますか",romaji:"Eigo o hanasemasu ka",say:"AY-goh oh hah-nah-seh-mahs kah",en:"Do you speak English?",note:"Lead with 'sumimasen' first."},
+ {jp:"わかりません",romaji:"Wakarimasen",say:"wah-kah-ree-mah-SEN",en:"I don't understand",note:""},
+ {jp:"これは何ですか",romaji:"Kore wa nan desu ka",say:"KOH-reh wah nahn dess kah",en:"What is this?",note:"Point at the menu item and use it freely."},
+ {jp:"いくらですか",romaji:"Ikura desu ka",say:"ee-KOO-rah dess kah",en:"How much is it?",note:""},
+ {jp:"トイレはどこですか",romaji:"Toire wa doko desu ka",say:"TOY-reh wah DOH-koh dess kah",en:"Where is the toilet?",note:"Swap 'toire' for any place name to ask where it is."},
+ {jp:"駅はどこですか",romaji:"Eki wa doko desu ka",say:"EH-kee wah DOH-koh dess kah",en:"Where is the station?",note:""},
+ {jp:"これをください",romaji:"Kore o kudasai",say:"KOH-reh oh koo-dah-SAI",en:"This one, please",note:"Point and say it. Half your ordering is done."},
+ {jp:"お会計お願いします",romaji:"Okaikei onegaishimasu",say:"oh-kai-KAY oh-neh-gah-ee-shee-mahs",en:"The check, please",note:"Often you pay at the front register instead of the table."},
+ {jp:"予約をお願いします",romaji:"Yoyaku o onegaishimasu",say:"yoh-YAH-koo oh oh-neh-gah-ee-shee-mahs",en:"I'd like a reservation",note:""},
+ {jp:"一人です",romaji:"Hitori desu",say:"hee-TOH-ree dess",en:"One person",note:"Said at the restaurant door when they ask how many."},
+ {jp:"二人です",romaji:"Futari desu",say:"foo-TAH-ree dess",en:"Two people",note:""},
+ {jp:"美味しい",romaji:"Oishii",say:"oh-EE-shee",en:"Delicious",note:"Say it out loud at the counter. It always lands well."},
+ {jp:"大丈夫です",romaji:"Daijoubu desu",say:"dai-JOH-boo dess",en:"It's fine / No thank you",note:"Doubles as a polite refusal — for a bag, a receipt, anything."},
+ {jp:"助けてください",romaji:"Tasukete kudasai",say:"tah-SOO-keh-teh koo-dah-SAI",en:"Please help me",note:""},
+ {jp:"写真を撮ってもいいですか",romaji:"Shashin o totte mo ii desu ka",say:"SHAH-sheen oh TOHT-teh moh ee dess kah",en:"May I take a photo?",note:"Worth asking inside temples, shops, and small restaurants."},
+ {jp:"すごい",romaji:"Sugoi",say:"soo-GOY",en:"Amazing / Wow",note:""},
+ {jp:"乾杯",romaji:"Kanpai",say:"kahn-PAI",en:"Cheers",note:"Wait for everyone's glass before the first sip."},
+ {jp:"またね",romaji:"Mata ne",say:"MAH-tah neh",en:"See you later",note:"Casual — for people you've actually met."},
+ {jp:"どういたしまして",romaji:"Dou itashimashite",say:"doh ee-tah-shee-MAH-shteh",en:"You're welcome",note:""},
 ];
 
 const TTS = (typeof window !== 'undefined' && 'speechSynthesis' in window) ? window.speechSynthesis : null;
@@ -298,7 +319,8 @@ function buildList(){
     const b = document.createElement('button');
     b.className = 'row';
     b.innerHTML = `<span class="num">${String(i+1).padStart(2,'0')}</span>
-      <span><span class="jpr">${p.jp}</span><span class="enr" style="display:block">${p.romaji} — ${p.en}</span></span>`;
+      <span><span class="jpr">${p.jp}</span><span class="enr" style="display:block">${p.romaji} · ${p.say}</span>
+      <span class="enr" style="display:block">${p.en}</span></span>`;
     b.onclick = ()=>{ stop(); idx = i; render(); if(playing) run(); };
     listContainer.appendChild(b);
   });
@@ -308,6 +330,7 @@ function render(){
   const p = phrases[idx];
   jpText.textContent = p.jp;
   romajiText.textContent = p.romaji;
+  $('sayText').textContent = p.say;
   enText.textContent = p.en;
   usageText.textContent = p.note;
   usageText.style.display = p.note ? 'block' : 'none';
