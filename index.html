@@ -130,16 +130,18 @@
   .play{flex:1;background:var(--sign);border-color:var(--sign);color:#06170f;}
   .play:hover{background:#1ea06e;}
 
-  .dock{}
+  .dock-spacer{display:none;}
   @media (max-width:680px){
     .dock{
-      position:sticky;bottom:0;z-index:20;
-      margin:0 -18px;padding:10px 18px calc(10px + env(safe-area-inset-bottom));
-      background:rgba(13,22,38,.94);
-      backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+      position:fixed;left:0;right:0;bottom:0;z-index:50;
+      padding:10px 18px calc(10px + env(safe-area-inset-bottom));
+      background:rgba(13,22,38,.95);
+      backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
       border-top:1px solid var(--line);
     }
-    body{padding-bottom:24px;}
+    .dock .controls{max-width:660px;margin:0 auto;}
+    .dock-spacer{display:block;height:70px;}
+    body{padding-bottom:96px;}
   }
   .opts{display:flex;flex-wrap:wrap;gap:14px;align-items:center;
     margin:18px 0 6px;font-size:.82rem;color:var(--paper-dim);}
@@ -222,6 +224,7 @@
     <button id="nextBtn" aria-label="Next phrase">▶</button>
   </div>
   </div>
+  <div class="dock-spacer"></div>
 
   <div class="opts">
     <label>Speed
